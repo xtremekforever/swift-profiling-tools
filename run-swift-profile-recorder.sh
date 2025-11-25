@@ -1,5 +1,7 @@
 #!/bin/bash
 
+WORKING_DIR=${WORKING_DIR:=$(pwd)}
+
 BINARY_NAME=$1
 if [ -z "$BINARY_NAME" ]; then
   echo "Usage: $0 <binary-name>"
@@ -14,8 +16,9 @@ TIME_INTERVAL=${TIME_INTERVAL:=10}
 # Cleanup old sock
 rm /tmp/${BINARY_NAME}.sock
 
+cd ${WORKING_DIR}
 echo "Running ${BINARY_NAME} with ProfileRecorderServer enabled..."
-PROFILE_RECORDER_SERVER_URL_PATTERN=unix:///tmp/${BINARY_NAME}.sock ${BINARY_NAME} $ARGUMENTS &
+PROFILE_RECORDER_SERVER_URL_PATTERN=unix:///tmp/${BINARY_NAME}.sock ./${BINARY_NAME} $ARGUMENTS &
 
 # Give some time for the app to start
 sleep 1s
